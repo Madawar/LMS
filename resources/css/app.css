@@ -1,0 +1,8 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'modal.css';
+@import 'flatpickr.css';
+@import 'Chart.min.css';
+@import 'choices.min.css';
+
