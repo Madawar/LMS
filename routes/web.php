@@ -29,11 +29,11 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('leave', LeaveController::class)->middleware('auth');
-Route::resource('department', DepartmentController::class)->middleware('auth');
-Route::resource('insight', InsightController::class)->middleware('auth');
-Route::resource('notification', NotificationController::class)->middleware('auth');
-Route::resource('staff', StaffController::class)->middleware('auth');
-Route::resource('profile', ProfileController::class)->middleware('auth');
-Route::resource('holiday', HolidayController::class)->middleware('auth');
-Route::get('/toword/{id}', [LeaveController::class, 'toWord'])->name('word');
+Route::resource('leave', LeaveController::class)->middleware(['auth','staffverified']);
+Route::resource('department', DepartmentController::class)->middleware(['auth','staffverified']);
+Route::resource('insight', InsightController::class)->middleware(['auth','staffverified']);
+Route::resource('notification', NotificationController::class)->middleware(['auth','staffverified']);
+Route::resource('staff', StaffController::class)->middleware(['auth','staffverified']);
+Route::resource('profile', ProfileController::class)->middleware(['auth','staffverified']);
+Route::resource('holiday', HolidayController::class)->middleware(['auth','staffverified']);
+Route::get('/toword/{id}', [LeaveController::class, 'toWord'])->middleware(['auth','staffverified']);

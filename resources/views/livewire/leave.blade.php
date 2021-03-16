@@ -29,6 +29,7 @@
             </div>
         </div>
     </div>
+    <hr class="mt-2" />
     <div>
         @if ($calculation)
             <table class="table-auto w-full mt-5" wire:loading.class="cursor-wait">

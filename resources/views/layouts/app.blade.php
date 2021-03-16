@@ -14,10 +14,10 @@
 
 <body>
     @include('layouts.header')
-    <div class="container mx-auto my-1 border-2  border-gray-50">
-        <div class="grid md:grid-cols-5 md:divide-x divide-gray divide-opacity-25 ">
+    <div class="container mx-auto my-1 ">
+        <div class="grid md:grid-cols-5 md:divide-x divide-gray divide-opacity-25  gap-3">
             @include('layouts.sidebar')
-            <div class=" col-span-4">
+            <div class=" col-span-4 border border-gray-50 shadow">
                 @if (Auth::user()->unreadNotifications->count() > 0)
                     <div class="border-b border-gray-50 p-5">
                         <div class="flex bg-pink-700 p-4">

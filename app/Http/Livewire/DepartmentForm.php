@@ -116,7 +116,7 @@ class DepartmentForm extends Component
             'department_manager' => 'required',
             'number_of_relievers' => 'required|numeric',
             'department' => 'required',
-            'supervisors' => 'required',
+            'supervisors' => '',
         ]);
         if(is_array($this->supervisors)){
 
