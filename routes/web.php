@@ -34,6 +34,6 @@ Route::resource('department', DepartmentController::class)->middleware(['auth','
 Route::resource('insight', InsightController::class)->middleware(['auth','staffverified']);
 Route::resource('notification', NotificationController::class)->middleware(['auth','staffverified']);
 Route::resource('staff', StaffController::class)->middleware(['auth','staffverified']);
-Route::resource('profile', ProfileController::class)->middleware(['auth','staffverified']);
+Route::resource('profile', ProfileController::class)->middleware(['auth']);
 Route::resource('holiday', HolidayController::class)->middleware(['auth','staffverified']);
 Route::get('/toword/{id}', [LeaveController::class, 'toWord'])->middleware(['auth','staffverified']);
