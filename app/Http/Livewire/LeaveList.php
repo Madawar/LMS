@@ -29,7 +29,7 @@ class LeaveList extends Component
     public function render()
     {
         $query = Leave::query();
-        $query = $query->with('approvers.staff','raiser');
+        $query = $query->with('approvers.staff', 'raiser');
         if ($this->filter) {
             if ($this->filter == "unassigned") {
                 $query->whereNull('assigned_to_email');
@@ -45,16 +45,17 @@ class LeaveList extends Component
         }
         if ($this->sortBy) {
             $query->orderBy($this->sortBy);
-        }else{
-            $query->orderBy('created_at','DESC');
+        } else {
+            $query->orderBy('created_at', 'DESC');
         }
         if ($this->search) {
             $query->search($this->search, []);
         }
+        $query->where('staff_id', Auth::user()->id);
         if ($this->pagination) {
-            $leaves= $query->paginate($this->pagination);;
+            $leaves = $query->paginate($this->pagination);;
         } else {
-            $leaves= $query->paginate(10);
+            $leaves = $query->paginate(10);
         }
 
 
@@ -65,7 +66,7 @@ class LeaveList extends Component
     {
         \App\Models\Leave::destroy($id);
         DB::table('notifications')
-        ->where('data->leave_id', $id)
-        ->delete();
+            ->where('data->leave_id', $id)
+            ->delete();
     }
 }

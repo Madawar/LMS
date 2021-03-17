@@ -6,21 +6,35 @@
     <?php use App\Http\Controllers\StaffController;?>
     <?php use App\Http\Controllers\ProfileController;?>
     <?php use App\Http\Controllers\HolidayController;?>
+    <?php use App\Http\Controllers\LeaveQueueController;?>
+    <?php use Illuminate\Support\Str;?>
     <?php use  App\Models\Incident;?>
     <ul class="flex flex-col w-full">
         <li class="my-px">
             <a href="{{action([LeaveController::class, 'index'])}}"
                class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 {{ (request()->is('leave')) ? 'bg-gray-100' : '' }} ">
                 <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"  class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                       </svg>
+
                 </span>
-                <span class="ml-3">Leaves</span>
+                <span class="ml-3">{{Str::limit(Str::of(Str::of(Auth::user()->name)->explode(' ')[0])->plural(),7)}} Leaves</span>
                 <span class="flex items-center justify-center text-sm text-gray-500 font-semibold bg-gray-200 h-6 px-2 rounded-full ml-auto">{{$leaveCount}}</span>
             </a>
         </li>
+        <li class="my-px">
+            <a href="{{action([LeaveQueueController::class, 'index'])}}"
+               class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100 {{ (request()->is('queue')) ? 'bg-gray-100' : '' }} ">
+                <span class="flex items-center justify-center text-lg text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                      </svg>
 
+                </span>
+                <span class="ml-3">Process Leaves</span>
+            </a>
+        </li>
         <li class="my-px">
             <a href="{{action([DepartmentController::class, 'index'])}}"
                class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100 {{ (request()->is('department')) ? 'bg-gray-100' : '' }} ">
@@ -32,6 +46,7 @@
                 <span class="ml-3">Departments</span>
             </a>
         </li>
+
         <li class="my-px">
             <a href="{{action([HolidayController::class, 'index'])}}"
                class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100 {{ (request()->is('holiday')) ? 'bg-gray-100' : '' }} ">

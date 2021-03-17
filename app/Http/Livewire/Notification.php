@@ -99,8 +99,8 @@ class Notification extends Component
         ));
         $user =  Auth::user();
         DB::table('notifications')
-        ->where('data->leave_id', $id)
-        ->delete();
+            ->where('data->leave_id', $id)
+            ->delete();
         $leave->raiser->user->notify(new \App\Notifications\LeaveRelieveRejected($leave, $user));
         return $leave;
     }
@@ -112,6 +112,9 @@ class Notification extends Component
         if ($approvals->count() == 0) {
             $notify_staff = $leave->raiser->user;
             $notify_staff->notify(new \App\Notifications\LeaveApproved($leave));
+            $leave->update(array(
+                'finalized' => 1
+            ));
         }
     }
 }

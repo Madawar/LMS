@@ -63,7 +63,12 @@ class Leave extends Component
             $this->relievers_display = [];
         }
         $staff = Staff::where('pno', Auth::user()->pno)->first();
-        $this->max_relievers = (int) Department::find($staff->department)->number_of_relievers;
+        $department = Department::find($staff->department);
+        if ($department) {
+            $this->max_relievers = (int) $department->number_of_relievers;
+        } else {
+            $this->max_relievers = 0;
+        }
         $user = Staff::where('pno', Auth::user()->pno)->firstOrFail();
         $this->relievers_list = Staff::with('department.manager')->where('department', $user->department)->where('id', '!=', Auth::user()->id)->pluck('staff', 'id')->toArray();
     }
@@ -112,7 +117,7 @@ class Leave extends Component
 
     public function getRelievers()
     {
-        $this->relievers_display = null;
+        $this->relievers_display = [];
         foreach ($this->relievers as $user) {
             $this->relievers_display[] = array('staff_id' => Staff::find($user)->id, 'staff' => Staff::find($user)->staff, 'function' => 'Reliever');
         }
@@ -133,14 +138,17 @@ class Leave extends Component
         $staff = Staff::with('department.manager')->where('pno', '=', Auth::user()->pno)->first();;
         $department = Department::with('manager')->find($staff->department);
 
-        if ($department->supervisors) {
-            $supervisors = Staff::whereIn('id', json_decode($department->supervisors))->get();
-            //TODO Check SUpervisors Logic
-            foreach ($supervisors as $supervisor) {
-                $this->relievers_display[] = array('staff_id' => $supervisor->id, 'staff' => $supervisor->staff, 'function' => 'Supervisor');
+        if ($department) {
+            if (is_array(json_decode($department->supervisors))) {
+                $supervisors = Staff::whereIn('id', json_decode($department->supervisors))->get();
+                //TODO Check SUpervisors Logic
+                foreach ($supervisors as $supervisor) {
+                    $this->relievers_display[] = array('staff_id' => $supervisor->id, 'staff' => $supervisor->staff, 'function' => 'Supervisor');
+                }
             }
+            $this->relievers_display[] = array('staff_id' => $department->manager->id, 'staff' => $department->manager->staff, 'function' => 'Department Manager');
+        } else {
         }
-        $this->relievers_display[] = array('staff_id' => $department->manager->id, 'staff' => $department->manager->staff, 'function' => 'Department Manager');
     }
 
     public function saveLeave()
