@@ -23,11 +23,17 @@ class StaffImport implements ToModel, WithProgressBar
         } else {
             $date = Carbon::today();
         }
+        if ($row[3] == "") {
+            $days = 0;
+        } else {
+            $days = $row[3];
+        }
         return new Staff([
             'staff' => $row[0],
             'pno' => $row[1],
             'dateOfEmployment' => $date,
             'leaveIncrement' => '1.75',
+            'leave_days' => $days
         ]);
     }
 }
