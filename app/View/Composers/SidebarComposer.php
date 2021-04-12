@@ -38,7 +38,9 @@ class SidebarComposer
     {
         $notifications = Auth::user()->unreadNotifications;
         $leave_count = Leave::where('staff_id',Auth::user()->id)->count();
+        $leave_days = Leave::where('staff_id',Auth::user()->id)->first()->leave_days;
         $view->with('notificationCount', $notifications->count());
         $view->with('leaveCount',  $leave_count);
+        $view->with('leaveDays',  $leave_days);
     }
 }
