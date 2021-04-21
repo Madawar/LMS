@@ -14,7 +14,7 @@
 
 <body>
     @include('layouts.header')
-    <div class="container mx-auto my-1 ">
+    <div class=" mx-auto  ">
         <div class="grid md:grid-cols-5 md:divide-x divide-gray divide-opacity-25  gap-3">
             @include('layouts.sidebar')
             <div class=" col-span-4 border border-gray-50 shadow">

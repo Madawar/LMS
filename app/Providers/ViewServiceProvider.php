@@ -29,6 +29,7 @@ class ViewServiceProvider extends ServiceProvider
         // Using class based composers...
         View::composer('layouts.sidebar', SidebarComposer::class);
         View::composer('layouts.header', SidebarComposer::class);
+        View::composer('livewire.leave', SidebarComposer::class);
 
 
     }

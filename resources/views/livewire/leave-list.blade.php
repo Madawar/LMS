@@ -90,10 +90,11 @@
                         </div>
                         @foreach ($leave->approvers as $approver)
                             <span class="flex flex-row border border-gray-100 divide-x mt-1">
-                                <div class="flex p-2">
-                                    {{ $approver->staff->staff }}
+                                <div class="flex p-2 text-sm">
+                                    {{ Str::limit($approver->staff->staff, 10)}}
+
                                 </div>
-                                <div class="flex p-2 text-center items-center">
+                                <div class="flex p-2 text-center items-center text-sm">
                                     @if ($approver->approved)
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                             class="h-5 mt-1  text-green-600 text-center" viewBox="0 0 24 24" stroke="currentColor">

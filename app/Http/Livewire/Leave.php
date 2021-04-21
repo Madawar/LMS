@@ -46,7 +46,11 @@ class Leave extends Component
 
         if ($leaveid) {
 
-            $leave = \App\Models\Leave::with('raiser', 'approvers')->find($leaveid);
+            $leave = \App\Models\Leave::with('raiser')->with([
+                'approvers' => function ($query) {
+                    $query->where('level', '!=', 'Department Manager');
+                }
+            ])->find($leaveid);
             $selected = Staff::whereIn('id', $leave->approvers->pluck('staff_id'))->pluck('id');
             $this->selected = $selected;
             $this->relievers = $selected;
@@ -71,6 +75,7 @@ class Leave extends Component
         }
         $user = Staff::where('pno', Auth::user()->pno)->firstOrFail();
         $this->relievers_list = Staff::with('department.manager')->where('department', $user->department)->where('id', '!=', Auth::user()->id)->pluck('staff', 'id')->toArray();
+        $this->getDepartmentManagers();
     }
 
     public function render()
@@ -133,6 +138,18 @@ class Leave extends Component
         }
     }
 
+    public function getRelieversCount()
+    {
+        $staff = Staff::with('department.manager')->where('pno', '=', Auth::user()->pno)->first();;
+        $department = Department::with('manager')->find($staff->department);
+        if (is_array(json_decode($department->supervisors))) {
+            $total =   count(json_decode($department->supervisors));
+        } else {
+            $total = 0;
+        }
+        return 1 + $total;
+    }
+
     public function getDepartmentManagers()
     {
         $staff = Staff::with('department.manager')->where('pno', '=', Auth::user()->pno)->first();;
@@ -153,6 +170,10 @@ class Leave extends Component
 
     public function saveLeave()
     {
+        $this->validate([
+            'relievers_display' => 'min:' . $this->max_relievers + $this->getRelieversCount()
+
+        ]);
         DB::transaction(function () {
             $leave = \App\Models\Leave::create(array(
                 'staff_id' => Auth::user()->id,
@@ -191,10 +212,13 @@ class Leave extends Component
                 'amendedDays' => $this->calculation['calculation'],
             ));
             //Delete Notifications and Approvals
+
             Approval::where('leave_id', $this->leaveid)->delete();
+
             DB::table('notifications')
                 ->where('data->leave_id', $this->leaveid)
                 ->delete();
+
             $order = -1;
             foreach ($this->relievers_display as $approval) {
                 $order = $order + 1;
